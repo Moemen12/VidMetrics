@@ -1,0 +1,112 @@
+
+========================================
+TIMESTAMP: 3/26/2026, 8:33:35 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:33:35 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:36:30 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:36:30 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:36:49 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:36:49 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 3785461632]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:49:45 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 1433033252]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:49:45 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 1433033252]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:50:09 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 1433033252]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:50:09 PM [Context: Dashboard Segment Boundary]
+ERROR: YouTube API quota exceeded [Digest: 1433033252]
+DETAILS:
+QuotaExceededError: YouTube API quota exceeded
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:52:51 PM [Context: Dashboard Segment Boundary]
+ERROR: Channel not found for handle: @$T545654??r3-2o3 [Digest: 2123989629]
+DETAILS:
+ChannelNotFoundError: Channel not found for handle: @$T545654??r3-2o3
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 8:52:51 PM [Context: Dashboard Segment Boundary]
+ERROR: Channel not found for handle: @$T545654??r3-2o3 [Digest: 2123989629]
+DETAILS:
+ChannelNotFoundError: Channel not found for handle: @$T545654??r3-2o3
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 9:12:02 PM [Context: Dashboard Segment Boundary]
+ERROR: Channel not found for handle: @e4rt34t3 [Digest: 3680694973]
+DETAILS:
+ChannelNotFoundError: Channel not found for handle: @e4rt34t3
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 9:12:02 PM [Context: Dashboard Segment Boundary]
+ERROR: Channel not found for handle: @e4rt34t3 [Digest: 3680694973]
+DETAILS:
+ChannelNotFoundError: Channel not found for handle: @e4rt34t3
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 9:12:46 PM [Context: Dashboard Segment Boundary]
+ERROR: The playlist identified with the request's <code>playlistId</code> parameter cannot be found. [Digest: 1808665299]
+DETAILS:
+YouTubeApiError: The playlist identified with the request's <code>playlistId</code> parameter cannot be found.
+========================================
+
+========================================
+TIMESTAMP: 3/26/2026, 9:12:46 PM [Context: Dashboard Segment Boundary]
+ERROR: The playlist identified with the request's <code>playlistId</code> parameter cannot be found. [Digest: 1808665299]
+DETAILS:
+YouTubeApiError: The playlist identified with the request's <code>playlistId</code> parameter cannot be found.
+========================================

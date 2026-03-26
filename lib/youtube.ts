@@ -4,82 +4,9 @@ import { formatViews } from "./utils";
 import { cache } from "react";
 import { unstable_cache } from "next/cache";
 import { ChannelNotFoundError, QuotaExceededError, YouTubeApiError } from "./errors";
+import { ShortItem, VideoItem, CompetitorData, ChannelProfile, YouTubeApiResponse } from "./types";
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
-
-// --- Strict Domain Types ---
-export interface ShortItem {
-    id: string;
-    title: string;
-    publishedAt: string;
-    thumbnailUrl: string;
-    views: string;
-}
-
-export interface VideoItem {
-    id: string;
-    title: string;
-    channel?: string;
-    views: string;
-    viewCount: number;
-    likes: string;
-    duration: string;
-    thumbnailUrl: string;
-    publishedAt: string;
-    outlierScore?: string;
-}
-
-export interface CompetitorData {
-    name: string;
-    avatarUrl: string;
-    subscribers: string;
-    views: string;
-    engagement: string;
-}
-
-// --- Strict API Response Types ---
-interface YouTubeApiErrorDetails {
-    reason: string;
-    domain: string;
-    message: string;
-}
-
-interface YTItem {
-    id: string | { channelId?: string; videoId?: string };
-    snippet?: {
-        title: string;
-        channelTitle?: string;
-        publishedAt: string;
-        thumbnails: {
-            default?: { url: string };
-            medium?: { url: string };
-            high?: { url: string };
-            maxres?: { url: string };
-        };
-        resourceId?: { videoId: string };
-    };
-    statistics?: {
-        subscriberCount?: string;
-        viewCount?: string;
-        videoCount?: string;
-        likeCount?: string;
-    };
-    contentDetails?: {
-        relatedPlaylists?: { uploads: string };
-        videoId?: string;
-        duration?: string;
-    };
-}
-
-interface YouTubeApiResponse {
-    error?: {
-        code: number;
-        message: string;
-        errors?: YouTubeApiErrorDetails[];
-    };
-    items?: YTItem[];
-    nextPageToken?: string;
-}
 
 // --- Centralized API Error Handler ---
 function validateApiResponse(data: YouTubeApiResponse) {
@@ -92,7 +19,7 @@ function validateApiResponse(data: YouTubeApiResponse) {
 
 // --- Internal Fetching Functions (Uncached) ---
 
-async function fetchChannelStatsImpl(handle: string) {
+async function fetchChannelStatsImpl(handle: string): Promise<ChannelProfile> {
     if (!API_KEY) throw new YouTubeApiError("YOUTUBE_API_KEY is missing");
 
     const cleanHandle = handle.startsWith('@') ? handle.substring(1) : handle;
@@ -142,8 +69,9 @@ async function fetchChannelStatsImpl(handle: string) {
 }
 
 async function fetchLatestVideosImpl(playlistId: string): Promise<VideoItem[]> {
+    // Increased maxResults to 20 for better data sample (Intelligence metrics benefit from this)
     const res = await fetch(
-        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=6&playlistId=${playlistId}&key=${API_KEY}`
+        `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=20&playlistId=${playlistId}&key=${API_KEY}`
     );
     const data = (await res.json()) as YouTubeApiResponse;
     validateApiResponse(data);
@@ -151,7 +79,9 @@ async function fetchLatestVideosImpl(playlistId: string): Promise<VideoItem[]> {
     if (!data.items) return [];
 
     const videoIds = data.items.map(i => i.contentDetails?.videoId).filter(Boolean).join(',');
-    const statsRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails&id=${videoIds}&key=${API_KEY}`);
+
+    // CRITICAL: Restored 'snippet' to part to get tags and descriptions for intelligence extraction
+    const statsRes = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails,snippet&id=${videoIds}&key=${API_KEY}`);
     const statsData = (await statsRes.json()) as YouTubeApiResponse;
     validateApiResponse(statsData);
 
@@ -162,6 +92,8 @@ async function fetchLatestVideosImpl(playlistId: string): Promise<VideoItem[]> {
         return {
             id: vId,
             title: item.snippet?.title || '',
+            description: stats?.snippet?.description || item.snippet?.description || '',
+            tags: stats?.snippet?.tags || [],
             views: formatViews(vc),
             viewCount: vc,
             likes: formatViews(stats?.statistics?.likeCount || 0),

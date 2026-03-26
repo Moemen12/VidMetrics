@@ -1,7 +1,7 @@
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Lightbulb, TrendingUp, CalendarDays } from "lucide-react"
-import { IntelligenceMetrics, PillarMetric } from "@/lib/types"
+import { IntelligenceMetrics, PillarMetric, StatusLabel } from "@/lib/types"
 
 interface IntelligenceViewProps extends IntelligenceMetrics {
     readonly channelName: string;
@@ -16,13 +16,19 @@ export default function IntelligenceView({
     trendingTags,
     strategicSummary
 }: Readonly<IntelligenceViewProps>) {
-
+    // 1. Define the logic independently
+    const getViralStatus = (strength: number): StatusLabel => {
+        if (strength > 70) return "Dominant";
+        if (strength > 40) return "Optimal";
+        return "Stable";
+    };
+    // 2. Use it in your array
     const PILLARS: PillarMetric[] = [
         {
             name: "Viral Hooks",
             score: `${(viralHookStrength / 40).toFixed(1)}x`,
             strength: viralHookStrength,
-            status: viralHookStrength > 70 ? "Dominant" : viralHookStrength > 40 ? "Optimal" : "Stable"
+            status: getViralStatus(viralHookStrength) // Much cleaner
         },
         {
             name: "Engagement Velocity",
@@ -36,8 +42,7 @@ export default function IntelligenceView({
             strength: audienceRetention.score,
             status: audienceRetention.label
         },
-    ]
-
+    ];
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -46,7 +51,7 @@ export default function IntelligenceView({
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-2">
                                 <Lightbulb className="w-5 h-5 text-primary" />
-                                <CardTitle className="text-lg font-semibold tracking-tight text-on-surface">Strategy Analysis</CardTitle>
+                                <CardTitle className="text-lg font-semibold tracking-tight text-on-surface">Strategy Analysis: {channelName}</CardTitle>
                             </div>
                         </div>
                     </CardHeader>

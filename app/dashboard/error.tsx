@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { AlertCircle, RefreshCcw, Home, Play } from "lucide-react";
 import Link from "next/link";
-import { logErrorAction } from "@/app/actions";
+import { logErrorAction } from "@/app/actions/system";
 
 interface DashboardErrorProps {
     readonly error: Error & { digest?: string; code?: string };

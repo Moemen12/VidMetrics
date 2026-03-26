@@ -3,7 +3,7 @@
 import { MessageSquareText, ExternalLink, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { type ShortItem } from "@/lib/youtube";
+import { ShortItem } from "@/lib/types";
 
 interface VisualHookAnalysisProps {
     readonly shorts: ShortItem[];

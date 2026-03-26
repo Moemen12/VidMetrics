@@ -1,4 +1,4 @@
-import { type CompetitorData } from "@/lib/youtube";
+import { type CompetitorData } from "@/lib/types";
 
 interface ComparisonTableProps {
     readonly competitors: ReadonlyArray<CompetitorData>;

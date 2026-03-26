@@ -1,7 +1,7 @@
 "use client";
 
 import { Search, Loader2 } from "lucide-react";
-import { analyzeChannel } from "@/app/actions";
+import { analyzeChannel } from "@/app/actions/channel";
 import { useTransition } from "react";
 
 export default function SearchForm() {
@@ -22,7 +22,7 @@ export default function SearchForm() {
                 <input
                     name="handle"
                     required
-                    className="w-full bg-[#1c1b1d] border-2 border-[#3d4a3d]/40 rounded-2xl py-6 pl-14 pr-36 text-lg focus:ring-0 focus:outline-none focus:border-primary transition-all placeholder:text-[#bccbb9]/30 text-[#e5e1e4]"
+                    className="w-full bg-[#1c1b1d] border-2 border-[#3d4a3d]/40 rounded-2xl py-6 pl-14 pr-36 text-md focus:ring-0 focus:outline-none focus:border-primary transition-all placeholder:text-[#bccbb9]/30 text-[#e5e1e4]"
                     placeholder="Enter channel handle (e.g. @mkbhd)"
                     type="text"
                     disabled={isPending}
@@ -40,7 +40,7 @@ export default function SearchForm() {
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-[#4be277] text-[#003915] font-bold px-8 py-3.5 rounded-xl hover:bg-[#5cf58a] active:scale-95 transition-all shadow-lg shadow-[#4be277]/10 cursor-pointer disabled:opacity-50 flex items-center gap-2"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 bg-[#4be277] text-[#003915] font-bold px-6 py-2.5 rounded-xl hover:bg-[#5cf58a] active:scale-95 transition-all shadow-lg shadow-[#4be277]/10 cursor-pointer disabled:opacity-50 flex items-center gap-2"
                 >
                     {isPending ? 'Analyzing' : 'Analyze'}
                 </button>
@@ -51,7 +51,7 @@ export default function SearchForm() {
     );
 }
 
-const QUICK_HANDLES = ["@MrBeast", "@Veritasium", "@AliAbdaal"] as const;
+const QUICK_HANDLES = ["@MrBeast", "@Veritasium", "@INKI"] as const;
 
 interface QuickLinksProps {
     readonly isPending: boolean;
@@ -60,22 +60,24 @@ interface QuickLinksProps {
 
 function QuickLinks({ isPending, onAction }: Readonly<QuickLinksProps>) {
     return (
-        <div className="flex flex-wrap items-center justify-center gap-3">
+        <div className="flex flex-col items-center justify-center gap-3">
             <span className="text-xs font-bold uppercase tracking-widest text-[#3d4a3d]">
                 Try these:
             </span>
-            {QUICK_HANDLES.map((handle) => (
-                <form key={handle} action={onAction}>
-                    <input type="hidden" name="handle" value={handle} />
-                    <button
-                        type="submit"
-                        disabled={isPending}
-                        className="px-3 py-1.5 rounded-full bg-[#1c1b1d] border border-[#3d4a3d]/30 text-xs font-semibold hover:border-[#4be277]/50 hover:text-[#4be277] transition-colors text-[#e5e1e4] cursor-pointer disabled:opacity-50"
-                    >
-                        {handle}
-                    </button>
-                </form>
-            ))}
+            <div className="flex flex-wrap items-center justify-center gap-3">
+                {QUICK_HANDLES.map((handle) => (
+                    <form key={handle} action={onAction}>
+                        <input type="hidden" name="handle" value={handle} />
+                        <button
+                            type="submit"
+                            disabled={isPending}
+                            className="px-3 py-1.5 rounded-full bg-[#1c1b1d] border border-[#3d4a3d]/30 text-xs font-semibold hover:border-[#4be277]/50 hover:text-[#4be277] transition-colors text-[#e5e1e4] cursor-pointer disabled:opacity-50"
+                        >
+                            {handle}
+                        </button>
+                    </form>
+                ))}
+            </div>
         </div>
     );
 }

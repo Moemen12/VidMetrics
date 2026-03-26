@@ -12,10 +12,16 @@ import VisualHookAnalysis from "../components/dashboard/VisualHookAnalysis";
 import IntelligenceView from "../components/dashboard/IntelligenceView";
 import { Sparkles } from "lucide-react";
 import { fetchShorts, fetchChannelStats, fetchLatestVideos, fetchCompetitors } from "@/lib/youtube";
-import { calculatePostingCadence, extractHashtags } from "@/lib/utils";
+import {
+    calculatePostingCadence,
+    analyzeViralHooks,
+    calculateEngagementVelocity,
+    calculateAudienceRetention,
+    extractTrendingTags
+} from "@/lib/utils";
+import { generateStrategicSummary } from "@/app/actions/intelligence";
 import { ChannelNotFoundError } from "@/lib/errors";
-
-export type DashboardTab = "overview" | "competitors" | "intelligence" | "settings";
+import { DashboardTab } from "@/lib/types";
 
 interface PageProps {
     searchParams: Promise<{
@@ -45,33 +51,57 @@ export default async function DashboardPage({ searchParams }: Readonly<PageProps
         fetchCompetitors(profile.name, profile.id)
     ]);
 
-    // Apply Sorting and Filtering to Latest Videos
-    let latestVideos = [...rawLatestVideos];
-
-    // 1. Mock Category Filtering
+    // --- Filtering and Sorting (Overview) ---
+    let filteredVideos = [...rawLatestVideos];
     if (activeCategory) {
-        latestVideos = latestVideos.filter(video =>
+        filteredVideos = filteredVideos.filter(video =>
             video.title.toLowerCase().includes(activeCategory.toLowerCase()) ||
-            (activeCategory === "Shorts" && video.duration.split(':').length === 1) // Simple heuristic
+            (activeCategory === "Shorts" && video.duration.split(':').length === 1)
         );
     }
 
-    // 2. Sorting
     if (activeSort === "Views") {
-        latestVideos.sort((a, b) => b.viewCount - a.viewCount);
+        filteredVideos.sort((a, b) => b.viewCount - a.viewCount);
     } else if (activeSort === "Date") {
-        latestVideos.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+        filteredVideos.sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
     } else {
-        // Virality (by outlierScore) - simulated
-        latestVideos.sort((a, b) => {
+        filteredVideos.sort((a, b) => {
             const scoreA = Number.parseFloat(a.outlierScore || "1.0");
             const scoreB = Number.parseFloat(b.outlierScore || "1.0");
             return scoreB - scoreA;
         });
     }
 
-    const trendingTags = await extractHashtags(shortsDataArray.items.map((s: { title: string }) => s.title));
-    const postingCadence = await calculatePostingCadence(shortsDataArray.items.map((s: { publishedAt: string }) => s.publishedAt));
+    // --- Dynamic Intelligence Calculations ---
+    const allVideoTitles = rawLatestVideos.map(v => v.title);
+    const allVideoDates = rawLatestVideos.map(v => v.publishedAt);
+    const allViewCounts = rawLatestVideos.map(v => v.viewCount);
+
+    // Parse subscribers for formula calculation
+    const multiplierMap: Record<string, string> = {
+        K: '000',
+        M: '000000',
+        B: '000000000',
+    };
+
+    const subStr = profile.subscribers
+        .replaceAll(/[KMB]/g, m => multiplierMap[m] ?? '')
+        .replaceAll('.', '');
+    const subCount = Number(subStr) || 1000000;
+
+    const intelligence = {
+        postingCadence: calculatePostingCadence(allVideoDates),
+        viralHookStrength: analyzeViralHooks(allVideoTitles),
+        engagementVelocity: calculateEngagementVelocity(allViewCounts, subCount),
+        audienceRetention: calculateAudienceRetention(rawLatestVideos),
+        trendingTags: extractTrendingTags(rawLatestVideos, profile.name),
+    };
+
+    const strategicSummary = await generateStrategicSummary(
+        profile.name,
+        intelligence.trendingTags.map(t => t.tag),
+        intelligence.postingCadence
+    );
 
     return (
         <div className="bg-background text-on-surface min-h-screen">
@@ -86,7 +116,7 @@ export default async function DashboardPage({ searchParams }: Readonly<PageProps
                     category="Active Creator"
                     views30d={profile.totalViews}
                     imageUrl={profile.imageUrl}
-                    videoData={latestVideos}
+                    videoData={filteredVideos}
                 />
 
                 {activeTab === "overview" && (
@@ -94,12 +124,12 @@ export default async function DashboardPage({ searchParams }: Readonly<PageProps
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <StatCard label="Total Uploads" value={profile.videoCount} subValue="Videos on channel" />
                             <StatCard label="Lifetime Views" value={profile.totalViews} subValue="Total reach" trend="Live" />
-                            <StatCard variant="outlier" Icon={Sparkles} label="Recent Upload" value={latestVideos[0]?.title || "N/A"} subValue={latestVideos[0] ? `${latestVideos[0].views} views` : "Scanning..."} />
+                            <StatCard variant="outlier" Icon={Sparkles} label="Recent Upload" value={filteredVideos[0]?.title || "N/A"} subValue={filteredVideos[0] ? `${filteredVideos[0].views} views` : "Scanning..."} />
                         </div>
-                        <div className="space-y-8">
+                        <div className="space-y-8 animate-in fade-in duration-500">
                             <ControlBar />
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {latestVideos.map((video: import("@/lib/youtube").VideoItem) => (
+                                {filteredVideos.map((video) => (
                                     <VideoCard key={video.id} {...video} />
                                 ))}
                             </div>
@@ -108,7 +138,7 @@ export default async function DashboardPage({ searchParams }: Readonly<PageProps
                 )}
 
                 {activeTab === "competitors" && (
-                    <div className="space-y-10">
+                    <div className="space-y-10 animate-in fade-in duration-500">
                         <CompetitorHeader competitors={compData.competitors} />
                         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                             <div className="lg:col-span-2 space-y-8">
@@ -124,9 +154,9 @@ export default async function DashboardPage({ searchParams }: Readonly<PageProps
 
                 {activeTab === "intelligence" && (
                     <IntelligenceView
-                        trendingTags={trendingTags}
-                        postingCadence={postingCadence}
                         channelName={profile.name}
+                        {...intelligence}
+                        strategicSummary={strategicSummary}
                     />
                 )}
             </main>

@@ -1,18 +1,41 @@
 import { Progress } from "@/components/ui/progress"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Lightbulb, TrendingUp, CalendarDays } from "lucide-react"
+import { IntelligenceMetrics, PillarMetric } from "@/lib/types"
 
-interface IntelligenceViewProps {
-    readonly trendingTags: Array<{ tag: string; count: number }>;
-    readonly postingCadence: string;
+interface IntelligenceViewProps extends IntelligenceMetrics {
     readonly channelName: string;
 }
 
-export default function IntelligenceView({ trendingTags, postingCadence, channelName }: Readonly<IntelligenceViewProps>) {
-    const PILLARS = [
-        { name: "Viral Hooks", score: "2.4x", strength: 88, status: "Dominant" },
-        { name: "Engagement Velocity", score: "1.8x", strength: 72, status: "Optimal" },
-        { name: "Audience Retention", score: "1.2x", strength: 55, status: "Stable" },
+export default function IntelligenceView({
+    channelName,
+    postingCadence,
+    viralHookStrength,
+    engagementVelocity,
+    audienceRetention,
+    trendingTags,
+    strategicSummary
+}: Readonly<IntelligenceViewProps>) {
+
+    const PILLARS: PillarMetric[] = [
+        {
+            name: "Viral Hooks",
+            score: `${(viralHookStrength / 40).toFixed(1)}x`,
+            strength: viralHookStrength,
+            status: viralHookStrength > 70 ? "Dominant" : viralHookStrength > 40 ? "Optimal" : "Stable"
+        },
+        {
+            name: "Engagement Velocity",
+            score: `${engagementVelocity.score}%`,
+            strength: Math.min(engagementVelocity.score * 4, 100),
+            status: engagementVelocity.label
+        },
+        {
+            name: "Audience Retention",
+            score: `${(audienceRetention.score / 50).toFixed(1)}x`,
+            strength: audienceRetention.score,
+            status: audienceRetention.label
+        },
     ]
 
     return (
@@ -34,7 +57,7 @@ export default function IntelligenceView({ trendingTags, postingCadence, channel
                                     <div className="flex justify-between items-end">
                                         <div>
                                             <p className="text-sm font-bold text-on-surface group-hover:text-primary transition-colors">{p.name}</p>
-                                            <p className="text-[10px] font-medium text-on-surface-variant">{p.status}</p>
+                                            <p className="text-[10px] font-medium text-on-surface-variant uppercase tracking-wider">{p.status}</p>
                                         </div>
                                         <span className="text-xs font-black text-primary">{p.score} Growth</span>
                                     </div>
@@ -57,8 +80,8 @@ export default function IntelligenceView({ trendingTags, postingCadence, channel
                             <div className="flex flex-wrap gap-2">
                                 {trendingTags.length > 0 ? (
                                     trendingTags.map((t) => (
-                                        <div key={t.tag} className="px-3 py-1.5 bg-surface-container-high border border-outline-variant/50 rounded-lg text-xs font-bold text-on-surface">
-                                            {t.tag} <span className="ml-2 text-[8px] opacity-40">{t.count}x</span>
+                                        <div key={t.tag} className="px-3 py-1.5 bg-surface-container-high border border-outline-variant/50 rounded-lg text-xs font-bold text-on-surface group hover:border-primary/50 transition-colors">
+                                            {t.tag} <span className="ml-2 text-[8px] opacity-40 group-hover:opacity-100 transition-opacity">{t.count}x</span>
                                         </div>
                                     ))
                                 ) : (
@@ -80,13 +103,14 @@ export default function IntelligenceView({ trendingTags, postingCadence, channel
                 </div>
             </div>
 
-            <Card className="bg-surface-container border-outline-variant rounded-2xl">
-                <CardContent className="p-8 flex items-center gap-8 bg-linear-to-r from-primary/5 to-transparent">
-                    <Lightbulb className="w-8 h-8 text-primary animate-pulse" />
+            <Card className="bg-surface-container border-outline-variant rounded-2xl overflow-hidden">
+                <CardContent className="p-8 flex items-center gap-8 bg-linear-to-r from-primary/5 to-transparent relative">
+                    <div className="absolute top-0 left-0 w-1 h-full bg-primary" />
+                    <Lightbulb className="w-8 h-8 text-primary shrink-0" />
                     <div className="space-y-1">
                         <h4 className="text-xs font-black uppercase tracking-widest text-primary">Intelligence Summary</h4>
                         <p className="text-base text-on-surface leading-relaxed italic font-medium">
-                            &quot;Current data suggests {channelName} is prioritizing high-engagement keywords like <span className="text-primary font-bold">{trendingTags[0]?.tag || 'N/A'}</span>. To compete, align your production with the detected {postingCadence} cadence.&quot;
+                            &quot;{strategicSummary}&quot;
                         </p>
                     </div>
                 </CardContent>

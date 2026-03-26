@@ -1,6 +1,6 @@
 import { LayoutDashboard, Users, Brain, Settings } from "lucide-react";
 import Link from "next/link";
-import { type DashboardTab } from "../../dashboard/page";
+import { type DashboardTab } from "@/lib/types";
 
 interface BottomNavProps {
     readonly activeTab: DashboardTab;
@@ -22,8 +22,8 @@ export default function BottomNav({ activeTab, handle }: Readonly<BottomNavProps
                     key={label}
                     href={`/dashboard?tab=${label}&channel=${encodeURIComponent(handle)}`}
                     className={`flex flex-col items-center justify-center rounded-2xl w-12 h-12 transition-all duration-200 ${activeTab === label
-                        ? 'bg-primary/20 text-primary border border-primary/20'
-                        : 'text-on-surface-variant hover:text-primary'
+                            ? 'bg-primary/20 text-primary border border-primary/20'
+                            : 'text-on-surface-variant hover:text-primary'
                         }`}
                 >
                     <Icon className="w-6 h-6" />

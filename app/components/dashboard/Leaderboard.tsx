@@ -1,5 +1,5 @@
 import { Rocket } from "lucide-react";
-import { type VideoItem } from "@/lib/youtube";
+import { type VideoItem } from "@/lib/types";
 
 interface LeaderboardProps {
     readonly videos: ReadonlyArray<VideoItem>;

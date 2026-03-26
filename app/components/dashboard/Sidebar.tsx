@@ -1,6 +1,6 @@
 import { LayoutDashboard, Users, Lightbulb, Settings } from "lucide-react";
 import Link from "next/link";
-import { type DashboardTab } from "../../dashboard/page";
+import { type DashboardTab } from "@/lib/types";
 
 interface SidebarProps {
     readonly activeTab: DashboardTab;

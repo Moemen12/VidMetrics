@@ -18,6 +18,7 @@ export default function VideoCard({ title, views, likes, duration, thumbnailUrl,
                     alt={title}
                     src={thumbnailUrl}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute bottom-3 right-3 bg-black/80 px-2 py-1 rounded text-[10px] font-bold tracking-widest text-white z-10">{duration}</div>

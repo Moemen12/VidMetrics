@@ -1,32 +1,43 @@
+import { type CompetitorData } from "@/lib/youtube";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function CompetitorHeader() {
-    const competitors = [
-        { name: "MrBeast", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDkBRfVhXIFJqlR1JZA8lZ46-I9mm3ShhMFURNtefAaQSeZEyz-wNyvN8uR3r9UmUi_MHaUmlva5fAtEaVpEMlnfjwYaZ_mFlsVmtj_Jeaw8-lFlrZxC0lZGXzSDwI2PLyRSrSMULc_gOh0SxfbBMEHAoLgv1QzqUXlyFNIpobUJOiTnV1mT5AjOA_CPzS0iqVL4MX2RyBqsos_KfZwacxJGYe675h46GW9XTZK7dqx8PBB5NC8JbxSa8J94GGpHyncUUi5I3RTZ1rW" },
-        { name: "Veritasium", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDkBRfVhXIFJqlR1JZA8lZ46-I9mm3ShhMFURNtefAaQSeZEyz-wNyvN8uR3r9UmUi_MHaUmlva5fAtEaVpEMlnfjwYaZ_mFlsVmtj_Jeaw8-lFlrZxC0lZGXzSDwI2PLyRSrSMULc_gOh0SxfbBMEHAoLgv1QzqUXlyFNIpobUJOiTnV1mT5AjOA_CPzS0iqVL4MX2RyBqsos_KfZwacxJGYe675h46GW9XTZK7dqx8PBB5NC8JbxSa8J94GGpHyncUUi5I3RTZ1rW" },
-        { name: "MKBHD", avatar: "https://lh3.googleusercontent.com/aida-public/AB6AXuDkBRfVhXIFJqlR1JZA8lZ46-I9mm3ShhMFURNtefAaQSeZEyz-wNyvN8uR3r9UmUi_MHaUmlva5fAtEaVpEMlnfjwYaZ_mFlsVmtj_Jeaw8-lFlrZxC0lZGXzSDwI2PLyRSrSMULc_gOh0SxfbBMEHAoLgv1QzqUXlyFNIpobUJOiTnV1mT5AjOA_CPzS0iqVL4MX2RyBqsos_KfZwacxJGYe675h46GW9XTZK7dqx8PBB5NC8JbxSa8J94GGpHyncUUi5I3RTZ1rW" }
-    ];
+interface CompetitorHeaderProps {
+    readonly competitors: ReadonlyArray<CompetitorData>;
+}
+
+export default function CompetitorHeader({ competitors }: Readonly<CompetitorHeaderProps>) {
+    if (competitors.length === 0) return null;
 
     return (
-        <div className="flex items-center justify-center gap-4 bg-surface-container-low p-6 rounded-2xl border border-outline-variant/30 shadow-xl overflow-x-auto no-scrollbar">
-            {competitors.map((comp, i) => (
-                <div key={comp.name} className="flex items-center gap-4">
-                    <div className="flex flex-col items-center gap-2 group cursor-pointer transition-all duration-300 hover:scale-110">
-                        <div className={`relative w-16 h-16 rounded-full border-2 ${i === 2 ? 'border-primary ring-4 ring-primary/10' : 'border-outline-variant'}`}>
-                            <Image
-                                src={comp.avatar}
-                                alt={comp.name}
-                                fill
-                                className="rounded-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all"
-                            />
-                        </div>
-                        <span className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-primary">{comp.name}</span>
+        <div className="bg-surface-container-low p-4 sm:p-6 rounded-2xl border border-outline-variant shadow-xl w-full">
+            <div className="flex items-center justify-center gap-2 sm:gap-8 max-w-2xl mx-auto overflow-hidden">
+                {competitors.map((comp, i) => (
+                    <div key={comp.name} className="flex items-center gap-2 sm:gap-8">
+                        <Link
+                            href={`/dashboard?tab=competitors&channel=${encodeURIComponent(comp.name)}`}
+                            className="flex flex-col items-center gap-2 group cursor-pointer transition-all duration-300"
+                        >
+                            <div className={`relative w-12 h-12 sm:w-16 sm:h-16 shrink-0 rounded-full border-2 border-outline-variant hover:border-primary transition-colors`}>
+                                <Image
+                                    src={comp.avatarUrl}
+                                    alt={comp.name}
+                                    fill
+                                    sizes="(max-width: 640px) 48px, 64px"
+                                    className="rounded-full object-cover transition-all"
+                                />
+                            </div>
+                            <span className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-primary transition-colors text-center w-full">
+                                {comp.name}
+                            </span>
+                        </Link>
+
+                        {i < competitors.length - 1 && (
+                            <span className="text-sm sm:text-xl font-black italic text-white shrink-0">Vs.</span>
+                        )}
                     </div>
-                    {i < competitors.length - 1 && (
-                        <span className="text-xl font-black italic text-outline-variant/50 mx-2">Vs.</span>
-                    )}
-                </div>
-            ))}
+                ))}
+            </div>
         </div>
     );
 }

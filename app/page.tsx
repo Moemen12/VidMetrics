@@ -5,7 +5,7 @@ import FooterStats from "./components/home/FooterStats";
 
 export default function Home() {
   return (
-    <main className="flex items-center justify-center min-h-screen p-6 relative">
+    <main className="flex items-center justify-center min-h-screen p-6 relative overflow-x-hidden">
       {/* Animated glow orb behind content */}
       <div className="glow-bg" aria-hidden="true" />
 

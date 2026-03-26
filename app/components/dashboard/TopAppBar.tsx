@@ -30,6 +30,7 @@ export default function TopAppBar() {
                         alt="User Profile"
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Bs4HuYj_yyvJysLSfkHddQrv_DulEShp6jez1cLPxzb9vZFxpmzm1HjoPYC95ZFrDMA83LrH9kt9NcVaIfKt1Pi7Ii-m1V9jM2C2ANPFEczWiONWJYccNynC0unq5UuUdPgNY1-6rCwBy6k7SH99aiRsFSim51qPjzvuZYqGMr4BvNEr_7kiXBG74hKYhtAEDbpHQ6Y9-jSCMpLuO9X8_MSijRVhMkgKo4zA4hvDRYUYT9TVdJeUDfAiB7kiTYRSvSe-vA0zzJby"
                         fill
+                        sizes="32px"
                         className="object-cover"
                     />
                 </div>

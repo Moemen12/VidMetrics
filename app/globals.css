@@ -108,6 +108,7 @@ html {
 body {
     background-color: var(--background);
     font-family: "Inter", sans-serif;
+    overflow-x: hidden;
 }
 
 .glow-bg {
@@ -162,13 +163,22 @@ body {
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
+    --background: #0e0e10;
+    --surface: #1c1b1d;
+    --surface-container-low: #1c1b1d;
+    --surface-container: #1c1b1d;
+    --surface-container-high: #262626;
+    --surface-container-highest: #323232;
+    --on-surface: #f4f4f5;
+    --on-surface-variant: #a1a1aa;
+    --primary: #4be277;
+    --on-primary: #000000;
+    --outline-variant: #262626;
+    --foreground: #f4f4f5;
     --card: oklch(0.205 0 0);
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
     --primary-foreground: oklch(0.205 0 0);
     --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);
@@ -196,13 +206,15 @@ body {
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
-  html {
-    @apply font-sans;
+
+    html {
+        @apply font-sans;
     }
 }

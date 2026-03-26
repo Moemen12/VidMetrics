@@ -1,36 +1,119 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ VidMetrics: Intelligence Dashboard for YouTube
 
-## Getting Started
+> Transform raw YouTube metadata into strategic, actionable content intelligence. Built for creators who want to outpace their niche.
 
-First, run the development server:
+[ ![Next.js 16](https://img.shields.io/badge/Next.js-16.2.1-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[ ![React 19](https://img.shields.io/badge/React-19.2.4-blue?style=for-the-badge&logo=react)](https://reactjs.org/)
+[ ![Tailwind CSS 4](https://img.shields.io/badge/Tailwind-4.0-38bdf8?style=for-the-badge&logo=tailwind-css)](https://tailwindcss.com/)
+[ ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+
+---
+
+## 🚀 Key Features
+
+- **📊 Strategic Intelligence View**: Real-time analysis of "Viral Hook Strength", "Engagement Velocity", and "Audience Retention" heuristics.
+- **🏁 Competitive Benchmarking**: Compare any channel side-by-side with market competitors. Features automated "Winner" highlighting for key metrics.
+- **📈 Global Trend Detection**: Scans the latest 20 videos for metadata patterns and trending tags across your niche.
+- **📝 AI-Driven Summaries**: Expert-toned strategic summaries generated based on recent channel performance.
+- **⚡ High-Performance Caching**: Multi-layered caching strategy (unstable_cache + Request Memoization) ensuring sub-100ms dashboard loads.
+- **📱 Responsive UI**: A premium, "glassmorphism" inspired design system built with Tailwind CSS 4 and Material You color principles.
+
+---
+
+## 🛠️ Technology Stack
+
+- **Framework**: [Next.js 16 (App Router)](https://nextjs.org/)
+- **UI Components**: [React 19](https://react.dev/), [Lucide Icons](https://lucide.dev/), [Recharts](https://recharts.org/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) with PostCSS
+- **Data Layer**: [YouTube Data API v3](https://developers.google.com/youtube/v3)
+- **Architecture**: Layered Clean Architecture (Services → Server Actions → UI Components)
+
+---
+
+## 📂 Project Structure
+
+```bash
+vidmetrics/
+├── app/                  # Next.js 16 App Router
+│   ├── actions/          # Specialized Server Actions (Channel, Intelligence, System)
+│   ├── components/       # Atomic UI Components
+│   └── dashboard/        # Main Dashboard Page & Layout
+├── lib/                  # Core Business Logic
+│   ├── types.ts          # Centralized Type Definitions (Source of Truth)
+│   ├── utils.ts          # Intelligence Algorithms & Formatters
+│   └── youtube.ts        # YouTube API Service with Cache Orchestration
+├── public/               # Asset Storage
+└── tailwind.config.ts    # Design System Configuration
+```
+
+---
+
+## ⚙️ Setup & Installation
+
+### 1. Prerequisites
+
+- [Node.js 20+](https://nodejs.org/)
+- [YouTube Data API Key](https://console.cloud.google.com/apis/library/youtube.googleapis.com)
+
+### 2. Clone the Repository
+
+```bash
+git clone https://github.com/Moemen12/VidMetrics.git
+cd vidmetrics
+```
+
+### 3. Environment Configuration
+
+Create a `.env` file in the root directory:
+
+```env
+YOUTUBE_API_KEY=your_api_key_here
+```
+
+### 4. Install Dependencies
+
+```bash
+npm install
+```
+
+### 5. Run the Project
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Navigate to `http://localhost:3000` and enter a YouTube handle (e.g., `@MKBHD`) to start.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 Intelligence Algorithms
 
-## Learn More
+### Viral Hook Strength
 
-To learn more about Next.js, take a look at the following resources:
+Uses regex-based pattern recognition to scan video titles for high-converting elements:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Questions**: `?` in title.
+- **Authority**: Keywords like "How to", "Secret", "Hack".
+- **Negativity**: "Stop", "Mistake", "Avoid".
+- **Listicles**: Titles starting with numbers.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Engagement Velocity
 
-## Deploy on Vercel
+Calculated by measuring the mean views of the last 5 videos against the total subscriber base, providing a "normalized" growth score independent of channel size.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```typescript
+// (Average views of last 5 videos / Total subscribers) * 100
+const velocity = (avgViews / subscriberCount) * 100;
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📄 License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+---
+
+<p align="center">
+Built with ❤️ for the Creator Economy
+</p>
